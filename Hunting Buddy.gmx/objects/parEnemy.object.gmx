@@ -68,22 +68,25 @@ image_index = 0;
             <kind>1</kind>
             <string>///Miss!
 
-var _missRange = 64;
+var _missRange = 128;
 
 if !g.gameHTML  {
     var _ID = instance_create(0, 0, objTracer);
-    _ID.startX = x + lengthdir_x(128, objPlayer.cameraYaw) + irandom_range(-_missRange, _missRange);
-    _ID.startY = y + lengthdir_y(128, objPlayer.cameraYaw) + irandom_range(-_missRange, _missRange);
-    _ID.startZ = drawZ;
-    _ID.endX = objPlayer.cameraX + lengthdir_x(lengthdir_x(32, objPlayer.cameraYaw), objPlayer.cameraAddTween / 6);
-    _ID.endY = objPlayer.cameraY + lengthdir_x(lengthdir_y(32, objPlayer.cameraYaw), objPlayer.cameraAddTween / 6);
-    _ID.endZ = objPlayer.cameraZFrom - 12 + lengthdir_y(6, objPlayer.cameraAddTween / 12);
+    _ID.startX = objPlayer.cameraX + lengthdir_x(lengthdir_x(32, objPlayer.cameraYaw), objPlayer.cameraAddTween / 6);
+    _ID.startY = objPlayer.cameraY + lengthdir_x(lengthdir_y(32, objPlayer.cameraYaw), objPlayer.cameraAddTween / 6);
+    _ID.startZ = objPlayer.cameraZFrom - 12 + lengthdir_y(6, objPlayer.cameraAddTween / 12);
+    _ID.endX = x + lengthdir_x(256, objPlayer.cameraYaw) + irandom_range(-_missRange, _missRange);
+    _ID.endY = y + lengthdir_y(256, objPlayer.cameraYaw) + irandom_range(-_missRange, _missRange);
+    _ID.endZ = drawZ;
+    _ID.directionYaw = objPlayer.cameraYaw;
+    
+    with (_ID)
+        event_user(0);
 }
 
 with (objPlayer)    {
     gunScale = 1;
-    comboAmount = 0;
-    comboTimer = comboTimerMax;
+    event_user(1);
 }
 
 var _ID = instance_create(x, y, objPoint);
@@ -129,6 +132,7 @@ _ID.Colour2 = pointColour4;
 with (objPlayer)    {
     comboAmount ++;
     comboTimer = comboTimerMax;
+    comboScaleAdd = 2;
 }
 </string>
           </argument>
@@ -166,12 +170,16 @@ enemyWordTyped = string_copy(enemyWordIndex, 1, min(enemyWordPosition, enemyWord
 
 if !g.gameHTML  {
     var _ID = instance_create(0, 0, objTracer);
-    _ID.startX = x + lengthdir_x(128, objPlayer.cameraYaw);
-    _ID.startY = y + lengthdir_y(128, objPlayer.cameraYaw);
-    _ID.startZ = drawZ;
-    _ID.endX = objPlayer.cameraX + lengthdir_x(lengthdir_x(32, objPlayer.cameraYaw), objPlayer.cameraAddTween / 6);
-    _ID.endY = objPlayer.cameraY + lengthdir_x(lengthdir_y(32, objPlayer.cameraYaw), objPlayer.cameraAddTween / 6);
-    _ID.endZ = objPlayer.cameraZFrom - 12 + lengthdir_y(6, objPlayer.cameraAddTween / 12);
+    _ID.startX = objPlayer.cameraX + lengthdir_x(lengthdir_x(32, objPlayer.cameraYaw), objPlayer.cameraAddTween / 6);
+    _ID.startY = objPlayer.cameraY + lengthdir_x(lengthdir_y(32, objPlayer.cameraYaw), objPlayer.cameraAddTween / 6);
+    _ID.startZ = objPlayer.cameraZFrom - 12 + lengthdir_y(6, objPlayer.cameraAddTween / 12);
+    _ID.endX = x + lengthdir_x(256, objPlayer.cameraYaw);
+    _ID.endY = y + lengthdir_y(256, objPlayer.cameraYaw);
+    _ID.endZ = drawZ;
+    _ID.directionYaw = objPlayer.cameraYaw;
+    
+    with (_ID)
+        event_user(0);
 }
 
 with (objPlayer)    {

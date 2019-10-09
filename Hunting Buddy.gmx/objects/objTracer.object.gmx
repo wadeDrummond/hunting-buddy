@@ -35,6 +35,40 @@ startZ = 0;
 endX = 0;
 endY = 0;
 endZ = 0;
+drawLength = 32;
+directionYaw = 0;
+
+event_user(0);
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="7" enumb="10">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Get Points
+
+drawStartX = startX;
+drawStartY = startY;
+drawStartZ = startZ;
+drawEndX = startX
+drawEndY = 0;
+drawEndZ = 0;
 </string>
           </argument>
         </arguments>
@@ -68,12 +102,19 @@ var widthPrecision = 0.5;
 for (var xx = -Width; xx &lt; Width; xx += widthPrecision)    {
     for (var yy = -Width; yy &lt; Width; yy += widthPrecision)    {
         for (var zz = -Width; zz &lt; Width; zz += widthPrecision)    {
-            d3d_draw_line(startX + xx, startY + yy, startZ + zz, endX + xx, endY + yy, endZ + zz, _Colour);
+            d3d_draw_line(drawStartX + xx, drawStartY + yy, drawStartZ + zz, drawEndX + xx, drawEndY + yy, drawEndZ + zz, _Colour);
         }
     }
 }
 
-Intensity = lerp(Intensity, 0, 0.4);
+drawStartX = lerp(startX, endX, 1 - Intensity);
+drawStartY = lerp(startY, endY, 1 - Intensity);
+drawStartZ = lerp(startZ, endZ, 1 - Intensity);
+drawEndX = drawStartX + lengthdir_x(drawLength, directionYaw);
+drawEndY = drawStartY + lengthdir_y(drawLength, directionYaw);
+drawEndZ = drawStartZ;
+
+Intensity = lerp(Intensity, 0, 0.2);
 
 if Intensity &lt;= 0
     instance_destroy();

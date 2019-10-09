@@ -55,16 +55,19 @@ cameraHeight = 64;
 cameraYaw = 0;
 cameraPitch = 5;
 cameraSpeedTurn = 8;
-cameraSpeedMove = 5;
-cameraSpeedAccelerate = 0.2;
+cameraSpeedMove = 7.5;
+cameraSpeedAccelerate = 0.5;
 cameraVelocityX = 0;
 cameraVelocityY = 0;
 cameraAddTween = 0;
 
 comboAmount = 0;
-comboTimerMax = fs(2);
+comboTimerMax = fs(2.5);
 comboTimer = comboTimerMax;
 comboAlpha = 0;
+comboScaleAdd = 0;
+comboScore = 0;
+comboSet = false;
 
 runLerp = 0;
 runLerpTarget = 0;
@@ -306,13 +309,18 @@ for (var i = 0; i &lt; ds_grid_height(_orderGrid); i ++)    {
 if comboAmount &gt; 1  {
     comboTimer = max(comboTimer - 1, 0);
     if comboTimer &lt;= 0  {
-        comboAmount = 0;
-        comboTimer = comboTimerMax;
+        event_user(1);
     }
     
     comboAlpha = lerp(comboAlpha, 1, 0.2);
+    comboSet = true;
 }   else    {
     comboAlpha = lerp(comboAlpha, 0, 0.2);
+    
+    if comboSet {
+        comboSet = false;
+        pointAmount += comboScore;
+    }
 }
 
 ds_grid_destroy(_orderGrid);
@@ -330,6 +338,45 @@ if (g.pointDecrementState &gt; 0)  {
         g.pointDecrementTimer = fs(1);
     }
 }
+
+while (instance_number(parEnemy) &lt; 8)    {
+    event_user(0);
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="7" enumb="11">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///End Combo
+
+if (comboAmount &lt; 5)
+    comboScore = (comboAmount);
+else if (comboAmount &lt; 10)
+    comboScore = (comboAmount * 2);
+else if (comboAmount &lt; 20)
+    comboScore = (comboAmount * 4);
+else
+    comboScore = (comboAmount * 6);
+
+comboAmount = 0;
+comboTimer = comboTimerMax;
 </string>
           </argument>
         </arguments>
@@ -466,18 +513,21 @@ if Intro    {
     }
     
     if comboAlpha &gt; 0  {
-        var _Dir = wave(-180, 180, 0.8, 0);
+        var _Dir = wave(-180, 180, 0.75, 0);
         var _Length = 8;
         var _posX = _Border + lengthdir_x(_Length, _Dir);
-        var _posY = room_height - (_Border * 2.5) + lengthdir_y(_Length, _Dir);
-        var _Colour = merge_colour(c_red, c_maroon, wave(0, 1, 1, 0));
-        var _Shadow = wave(-4, 4, 0.5, 0);
-        draw_text_parameters(fa_left, fa_bottom, _posX, _posY, string(comboAmount) + "x COMBO", comboAlpha, _Colour, _Shadow, _Scale, 0);
+        var _posY = room_height - (_Border * 2) + lengthdir_y(_Length, _Dir);
+        var _Colour = merge_colour(c_red, merge_colour(c_maroon, c_orange, wave(0, 1, 0.35, 0)), wave(0, 1, 0.5, 0));
+        var _Shadow = wave(-8, 8, 0.5, 0);
+        draw_text_parameters(fa_left, fa_bottom, _posX, _posY, string(comboAmount) + "x COMBO", comboAlpha, _Colour, _Shadow, _Scale + comboScaleAdd, 0);
     
         draw_set_alpha(comboAlpha);
-        draw_healthbar(_posX, _posY, _posX + (_Border * 6), _posY + _Border, (comboTimer / comboTimerMax) * 100, c_black, c_red, c_maroon, 1, true, true);
+        draw_healthbar(_posX, _posY, _posX + (_Border * 6), _posY + _Border, (comboTimer / comboTimerMax) * 100, c_black, c_red, c_maroon, 0, true, true);
         draw_set_alpha(1);
+        
     }
+    
+    comboScaleAdd = lerp(comboScaleAdd, 0, 0.2);
 }
 
 if Finish    {
