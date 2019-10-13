@@ -33,11 +33,11 @@ g.minY = g.roomBorder;
 g.maxX = room_width - g.roomBorder;
 g.maxY = room_height - g.roomBorder;
 
-PlayerInitRoom();
 PlayerInitCamera();
+PlayerInitEnemy();
+PlayerInitRoom();
 PlayerInitCombo();
 PlayerInitIntroduction();
-PlayerInitEnemy();
 PlayerInitRunning();
 PlayerInitFog();
 </string>

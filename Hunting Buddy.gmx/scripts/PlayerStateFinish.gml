@@ -13,3 +13,8 @@ if !finishSoundPlayed   {
     finishSoundPlayed = true;
     sound(sndBuddyFinish);
 }
+
+//Restart
+if keyboard_check_pressed(vk_escape)    {
+    room_restart();
+}
