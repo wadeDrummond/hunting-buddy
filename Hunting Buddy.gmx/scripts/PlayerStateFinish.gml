@@ -7,3 +7,9 @@ finishAddAngle = lerp(finishAddAngle, 0, 0.1);
 if submitKong   {
     KongregateSubmitScore("COMBOSCORE", pointAmount);
 }
+
+//Play Sound
+if !finishSoundPlayed   {
+    finishSoundPlayed = true;
+    sound(sndBuddyFinish);
+}

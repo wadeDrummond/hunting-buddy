@@ -8,7 +8,7 @@ if (instance_number(parEnemy) < 12)    {
 //Targeting and Attacking
 with (parEnemy)
     enemyTargeted = false;
-if enemyTarget != noone {
+if instance_exists(enemyTarget) {
     enemyDirection = point_direction(cameraX, cameraY, enemyTarget.x, enemyTarget.y);
     if ((point_distance(cameraX, cameraY, enemyTarget.x, enemyTarget.y) > enemyMinDistance))    {
         var _Speed = cameraSpeedMove;

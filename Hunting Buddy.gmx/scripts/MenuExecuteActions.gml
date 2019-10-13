@@ -4,7 +4,7 @@ switch (menuIndex)  {
     case MENU_TYPES.MAIN: //Main Menu
         switch (menuSelected)   {
             case 0: //NEW GAME
-                room_goto(roomCutscene);
+                fade_to(roomCutscene);
                 g.sceneIndex = 0;
             break;
             

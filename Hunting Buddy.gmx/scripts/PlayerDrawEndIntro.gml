@@ -9,4 +9,4 @@ var _Sprite = stateSprite[introState + 1];
 var _Index = lerp(0, sprite_get_number(_Sprite) - 1, introTimer / stateTime);
 draw_sprite_ext(_Sprite, _Index, _baseX, _baseY, _Scale, _Scale, _Angle, c_white, 1);
 
-gunYAdd = lerp(gunYAdd, 0, 0.08);
+gunYAdd = lerp(gunYAdd, 0, 0.045);

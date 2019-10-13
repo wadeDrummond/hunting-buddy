@@ -4,14 +4,16 @@ instance_create(0, 0, objFloor);
 instance_create(0, 0, objSkybox);
 instance_create(0, 0, objFence);
 
-repeat (40)    {
+repeat (40)
     instance_create(irandom(room_width), irandom(room_height), objDetailDay);
-}
 
-repeat (20)    {
+repeat (20)
     instance_create(0, 0, objDetailDayLarge);
-}
+    
+repeat (14)
+    event_user(0);
 
+//Level Specific Attributes
 pointsIndex[0] = 300;
 pointsIndex[9999] = -1;
 musicIndex[0] = bgmWoodlandLiving;

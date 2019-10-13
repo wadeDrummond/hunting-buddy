@@ -170,6 +170,10 @@ enemyTimer = irandom_range(fs(4), fs(6));
             <kind>1</kind>
             <string>///Draw Orthographics
 
+//Don't Use Orthographics with HTML Build
+if g.gameHTML
+    exit;
+
 //Initialize Variables
 var _Scale = 16 + gunScale;
 var _Width = sprite_get_width(sprViewmodelPistol) * _Scale;
@@ -184,6 +188,67 @@ gunScale = lerp(gunScale, 0, 0.2);
 d3d_fog_enable(false);
 draw_set_colour(c_white);
 d3d_set_projection_ortho(0, 0, room_width, room_height, 0);
+
+//Draw Gun
+draw_sprite_ext(sprViewmodelPistol, 0, _baseX, _baseY + gunYAdd, _Scale, _Scale, _Angle, c_white, 1);
+
+//Draw Based on State
+switch (stateCurrent)   {
+    case PSTATES.INTRO:
+        PlayerDrawEndIntro();
+        break;
+     
+    case PSTATES.PLAY:
+        PlayerDrawEndPlay();
+        break;
+     
+    case PSTATES.FINISH:
+        PlayerDrawEndFinish();
+        break;  
+}
+
+//Reset
+d3d_fog_enable(true);
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="64">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Only Use if HTML!
+
+if !g.gameHTML
+    exit;
+
+//Initialize Variables
+var _Scale = 16 + gunScale;
+var _Width = sprite_get_width(sprViewmodelPistol) * _Scale;
+var _Height = sprite_get_height(sprViewmodelPistol) * _Scale;
+var _baseX = room_width / 2 + lengthdir_x(32, cameraAddTween / 6);
+var _baseY = room_height - (_Height * 0.4) + lengthdir_y(16, cameraAddTween / 8) - (gunScale * 48) + handRunY;
+var _Angle = 0;
+handRunY = lerp(0, 72, runLerp);
+gunScale = lerp(gunScale, 0, 0.2);
+    
+//Set Projection
+d3d_fog_enable(false);
+draw_set_colour(c_white);
 
 //Draw Gun
 draw_sprite_ext(sprViewmodelPistol, 0, _baseX, _baseY + gunYAdd, _Scale, _Scale, _Angle, c_white, 1);

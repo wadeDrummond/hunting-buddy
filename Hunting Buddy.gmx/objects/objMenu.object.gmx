@@ -117,6 +117,9 @@ alarm[0] = fs(0.25);
             <kind>1</kind>
             <string>///Do Stuff
 
+if instance_exists(objTransitionOut)
+    exit;
+
 switch (stateCurrent)   {
     case MENU_STATES.NORMAL:
         MenuStateNormal();

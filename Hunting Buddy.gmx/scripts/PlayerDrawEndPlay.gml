@@ -33,6 +33,9 @@ if comboMode
     var _String = string(pointAmount) + " PTS.";
 draw_text_parameters(fa_left, fa_top, _posX, _posY, _String, 1, c_red, _Shadow, _Scale, 0);
 
+//Set Shadow for All Subsequent Drawings
+var _Shadow = wave(-8, 8, 0.5, 0);
+
 //Draw Combo
 if comboAlpha > 0  {
     var _Dir = wave(-180, 180, 0.75, 0);
@@ -40,7 +43,6 @@ if comboAlpha > 0  {
     var _posX = _Border + lengthdir_x(_Length, _Dir);
     var _posY = room_height - (_Border * 2) + lengthdir_y(_Length, _Dir);
     var _Colour = merge_colour(c_red, merge_colour(c_maroon, c_orange, wave(0, 1, 0.35, 0)), wave(0, 1, 0.5, 0));
-    var _Shadow = wave(-8, 8, 0.5, 0);
     draw_text_parameters(fa_left, fa_bottom, _posX, _posY, string(comboAmount) + "x COMBO", comboAlpha, _Colour, _Shadow, _Scale + comboScaleAdd, 0);
 
     draw_set_alpha(comboAlpha);
@@ -50,15 +52,25 @@ if comboAlpha > 0  {
 }
 comboScaleAdd = lerp(comboScaleAdd, 0, 0.2);
 
+//Draw Word
+var _Border = 128;
+var _wordScale = _Scale + enemyWordScale;
+var _posX = room_width - _Border - (string_width(enemyWord) * _wordScale);
+var _posY = room_height - _Border;
+var _Colour1 = merge_colour(c_white, c_blue, wave(0, 0.5, 2, 0));
+var _Colour2 = merge_colour(c_red, c_orange, wave(0, 1, 1, 0));
+draw_text_parameters(fa_left, fa_bottom, _posX, _posY, enemyWord, 1, _Colour1, _Shadow, _wordScale, 0);
+draw_text_parameters(fa_left, fa_bottom, _posX, _posY, enemyWordTyped, 1, _Colour2, _Shadow, _wordScale, 0);
+enemyWordScale = lerp(enemyWordScale, 0, 0.2);
+
 //Finish Detection
 if (_timeMinutes <= 0) and (_timeSeconds <= 15) and (!comboMode)  {
     var _interpAmount = (musicLength / 15);
     audio_sound_gain(musicPlayIndex, _interpAmount, 0);
     
-    if (musicLength <= 0) and (Finish == false) {
-        Finish = true;
-        audio_play_sound(sndBuddyFinish, 1, false);
+    if (musicLength <= 0)   {
+        stateCurrent = PSTATES.FINISH;
     }
 }
-var _musicDecrement = (delta_time * 0.0000001);
+var _musicDecrement = (delta_time * 0.000001);
 musicLength = max(musicLength - _musicDecrement, 0);

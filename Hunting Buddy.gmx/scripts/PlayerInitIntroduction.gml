@@ -15,6 +15,7 @@ stateTime = room_speed * 0.6;
 introTimer = 0;
 introState = -1;
 finishAddAngle = -180;
+finishSoundPlayed = false;
 introAddAngle = -180;
 introAddAngleTarget = -180;
 textBaseX = 0;

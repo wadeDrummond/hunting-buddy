@@ -79,6 +79,7 @@
       <script>scripts\sound.gml</script>
       <script>scripts\turn.gml</script>
       <script>scripts\wave.gml</script>
+      <script>scripts\fade_to.gml</script>
     </scripts>
     <scripts name="Enemy">
       <scripts name="Return">
@@ -160,6 +161,7 @@
     <object>objects\objFence</object>
     <object>objects\objFloor</object>
     <object>objects\objInit</object>
+    <object>objects\objMenu</object>
     <object>objects\objPlayer</object>
     <object>objects\objPoint</object>
     <object>objects\objSkybox</object>
@@ -168,7 +170,6 @@
     <object>objects\objTransitionOut</object>
     <object>objects\parBillboard</object>
     <object>objects\parEnemy</object>
-    <object>objects\objMenu</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\roomKongregate</room>

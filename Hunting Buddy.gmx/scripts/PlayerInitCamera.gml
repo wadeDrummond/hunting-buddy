@@ -16,7 +16,10 @@ cameraVelocityX = 0;
 cameraVelocityY = 0;
 cameraAddTween = 0;
 
-gunYAdd = 256;
+gunYAdd = 512;
+
+if g.gameHTML
+    display_set_gui_size(room_width, room_height);
 
 d3d_start();
 draw_set_colour(c_white);

@@ -9,4 +9,6 @@ while (point_distance(_ID.x, _ID.y, cameraX, cameraY) < (enemyDistance + 64))   
 
 if !instance_exists(enemyTarget)    {
     enemyTarget = _ID;
+    enemyWord = enemyTarget.enemyWordIndex;
+    enemyWordTyped = enemyTarget.enemyWordTyped;
 }
