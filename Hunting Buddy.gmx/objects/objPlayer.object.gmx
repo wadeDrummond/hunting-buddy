@@ -33,128 +33,13 @@ g.minY = g.roomBorder;
 g.maxX = room_width - g.roomBorder;
 g.maxY = room_height - g.roomBorder;
 
-instance_create(0, 0, objFloor);
-instance_create(0, 0, objSkybox);
-instance_create(0, 0, objFence);
-
-repeat (40)    {
-    instance_create(irandom(room_width), irandom(room_height), objDetailDay);
-}
-
-repeat (20)    {
-    instance_create(0, 0, objDetailDayLarge);
-}
-
-cameraX = x;
-cameraY = y;
-cameraZ = 0;
-cameraZFrom = 0;
-cameraXLast = cameraX;
-cameraYLast = cameraY;
-cameraHeight = 64;
-cameraYaw = 0;
-cameraPitch = 5;
-cameraSpeedTurn = 8;
-cameraSpeedMove = 7.5;
-cameraSpeedAccelerate = 0.5;
-cameraVelocityX = 0;
-cameraVelocityY = 0;
-cameraAddTween = 0;
-
-comboAmount = 0;
-comboTimerMax = fs(2.5);
-comboTimer = comboTimerMax;
-comboAlpha = 0;
-comboScaleAdd = 0;
-comboScore = 0;
-comboSet = false;
-
-runLerp = 0;
-runLerpTarget = 0;
-runSpeed = 0;
-runTilt = 0;
-handRunY = 0;
-
-enemyMinDistance = 128;
-enemyTarget = noone;
-enemyDirection = 0;
-
-enemyTimer = fs(2);
-
-Intro = true;
-introTimer = 0;
-introState = -1;
-Finish = false;
-finishAddAngle = -180;
-
-textString[0] = "";
-textString[1] = "THREE";
-textString[2] = "TWO";
-textString[3] = "ONE";
-textString[4] = "HUNT";
-
-stateHue[0] = 0;
-stateHue[1] = 0;
-stateHue[2] = 60;
-stateHue[3] = 120;
-stateHue[4] = 180;
-
-stateSprite[0] = sprBuddyCountdownIdle;
-stateSprite[1] = sprBuddyCountdownThree;
-stateSprite[2] = sprBuddyCountdownTwo;
-stateSprite[3] = sprBuddyCountdownOne;
-stateSprite[4] = sprBuddyCountdownHunt;
-
-stateTime = room_speed * 0.6;
-
-pointsIndex[0] = 300;
-pointsIndex[9999] = -1;
-musicIndex[0] = bgmWoodlandLiving;
-musicIndex[9999] = bgmPASWO;
-
-musicLength = audio_sound_length(musicIndex[g.sceneIndex]);
-musicPlayIndex = -1;
-
-textCount = 32;
-textDir = 135;
-introAddAngle = -180;
-introAddAngleTarget = -180;
-
-textBaseX = 0;
-textBaseY = 0;
-gunScale = 0;
-
-pointAmount = 0;
-pointQuota = pointsIndex[g.sceneIndex];
-
-d3d_start();
-draw_set_colour(c_white);
-
-g.fogColour = c_black;
-g.fogDistanceStart = 128;
-g.fogDistanceEnd = 2048;
-d3d_fog_enable(true);
-
-switch (g.sceneIndex)   {
-    case 0:
-        repeat(20)
-            event_user(0);
-        break;
-        
-    case 9999:
-        repeat(5)
-            event_user(0);
-        break;
-}
-
-enemyTarget = noone;
-
-g.pointDecrement[0] = -1;
-g.pointDecrement[1] = -2;
-g.pointDecrement[2] = -5;
-g.pointDecrement[3] = -10;
-g.pointDecrementState = 0;
-g.pointDecrementTimer = 0;
+PlayerInitRoom();
+PlayerInitCamera();
+PlayerInitCombo();
+PlayerInitIntroduction();
+PlayerInitEnemy();
+PlayerInitRunning();
+PlayerInitFog();
 </string>
           </argument>
         </arguments>
@@ -179,168 +64,18 @@ g.pointDecrementTimer = 0;
             <kind>1</kind>
             <string>///Update Movement
 
-if Intro    {
-    introTimer ++;
-    if (introTimer &gt;= stateTime)  {
-        introState ++;
-        introTimer = 0;
+switch (stateCurrent)   {
+    case PSTATES.INTRO:
+        PlayerStateIntro();
+        break;
         
-        switch (introState) {
-            case 0:
-                sound(sndBuddyThree);
-                break;
-            case 1:
-                sound(sndBuddyTwo);
-                break;
-            case 2:
-                sound(sndBuddyOne);
-                break;
-            case 3:
-                sound(sndBuddyHunt);
-                break;
-            case 4:
-                musicPlayIndex = audio_play_sound(musicIndex[g.sceneIndex], 1, true);
-                Intro = false;
-                break;
-            }
-        }
+    case PSTATES.PLAY:
+        PlayerStatePlay();
+        break;
         
-    if introState &lt;= 0  {
-        introAddAngleTarget = 0;
-    }   else if (introState &gt;= 4)   {
-        introAddAngleTarget = 180;
-    }
-    introAddAngle = lerp(introAddAngle, introAddAngleTarget, 0.1);
-        
-    exit;
-}
-
-if (Finish) {
-    finishAddAngle = lerp(finishAddAngle, 0, 0.1);
-    exit;
-}
-
-inputMove = keyboard_check(vk_space);
-
-if !instance_exists(parEnemy)    {
-    event_user(0);
-}
-
-if (!instance_exists(enemyTarget))  {
-    enemyTarget = instance_nearest(cameraX, cameraY, parEnemy);
-    if point_distance(cameraX, cameraY, enemyTarget.x, enemyTarget.y) &gt; 512 {
-        runLerpTarget = 1;
-    }
-}   else    {
-    runLerpTarget = 0;
-}
-
-runLerp = lerp(runLerp, runLerpTarget, 0.2);
-runSpeed = lerp(0, 1, runLerp);
-runTilt = lerp(0, -8, runLerp);
-    
-with (parEnemy)
-    enemyTargeted = false;
-    
-var _totalSpeed = cameraSpeedMove + runSpeed;
-
-if enemyTarget != noone {
-    enemyDirection = point_direction(cameraX, cameraY, enemyTarget.x, enemyTarget.y);
-    if ((point_distance(cameraX, cameraY, enemyTarget.x, enemyTarget.y) &gt; enemyMinDistance))    {
-        var _Speed = _totalSpeed;
-    }   else    {
-        var _Speed = 0;
-    }
-
-    cameraVelocityX = approach(cameraVelocityX, lengthdir_x(_Speed, cameraYaw), cameraSpeedAccelerate);
-    cameraVelocityY = approach(cameraVelocityY, lengthdir_y(_Speed, cameraYaw), cameraSpeedAccelerate);
-    cameraX += cameraVelocityX
-    cameraY += cameraVelocityY
-    cameraX = clamp(cameraX, g.minX, g.maxX);
-    cameraY = clamp(cameraY, g.minY, g.maxY);
-    
-    enemyTarget.enemyTargeted = true;
-    
-    if keyboard_check_pressed(vk_anykey)    {
-        inputKey = keyboard_lastchar;
-        if inputKey != " "  {
-            with (enemyTarget)  {
-                var _nextKey = string_char_at(enemyWordIndex, enemyWordPosition + 1);
-                if string_upper(_nextKey) == string_upper(other.inputKey)   {
-                    event_user(0);
-                }   else    {
-                    event_user(2);
-                }
-            }
-        }
-    }       
-}
-
-var _interpSpeed = (point_distance(cameraXLast, cameraYLast, cameraX, cameraY) / _totalSpeed);
-cameraAddTween += (15 * _interpSpeed);
-
-if (enemyTimer &lt;= 0) or (!instance_exists(parEnemy))
-    event_user(0);
-else
-    enemyTimer = max(enemyTimer - 1, 0);
-    
-cameraXLast = cameraX;
-cameraYLast = cameraY;
-textDir += 4;
-
-var _orderGrid = ds_grid_create(2, instance_number(parBillboard));
-
-for (var i = 0; i &lt; instance_number(parBillboard); i ++)    {
-    var _ID = instance_find(parBillboard, i);
-    var _Distance = point_distance(_ID.x, _ID.y, cameraX, cameraY);
-    _orderGrid[# 0, i] = _ID;
-    _orderGrid[# 1, i] = _Distance;
-}
-
-ds_grid_sort(_orderGrid, 1, true);
-
-var _startDepth = -200;
-for (var i = 0; i &lt; ds_grid_height(_orderGrid); i ++)    {
-    var _ID = _orderGrid[# 0, i];
-    _ID.depth = _startDepth;
-    _startDepth ++;
-}
-
-if comboAmount &gt; 1  {
-    comboTimer = max(comboTimer - 1, 0);
-    if comboTimer &lt;= 0  {
-        event_user(1);
-    }
-    
-    comboAlpha = lerp(comboAlpha, 1, 0.2);
-    comboSet = true;
-}   else    {
-    comboAlpha = lerp(comboAlpha, 0, 0.2);
-    
-    if comboSet {
-        comboSet = false;
-        pointAmount += comboScore;
-    }
-}
-
-ds_grid_destroy(_orderGrid);
-
-if keyboard_check_pressed(vk_end)   {
-    audio_stop_all();
-    room_restart();
-}
-
-//Decrement
-if (g.pointDecrementState &gt; 0)  {
-    g.pointDecrementTimer = max(g.pointDecrementTimer - 1, 0);
-    if g.pointDecrementTimer &lt;= 0   {
-        g.pointDecrementState = max(g.pointDecrementState - 1, 0);
-        g.pointDecrementTimer = fs(1);
-    }
-}
-
-while (instance_number(parEnemy) &lt; 8)    {
-    event_user(0);
+    case PSTATES.FINISH:
+        PlayerStateFinish();
+        break;
 }
 </string>
           </argument>
@@ -377,6 +112,12 @@ else
 
 comboAmount = 0;
 comboTimer = comboTimerMax;
+
+if comboMode    {
+    audio_stop_all();
+    stateCurrent = PSTATES.FINISH;
+    submitKong = g.gameHTML;    
+}
 </string>
           </argument>
         </arguments>
@@ -427,134 +168,42 @@ enemyTimer = irandom_range(fs(4), fs(6));
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var _Scale = 16 + gunScale;
+            <string>///Draw Orthographics
+
+//Initialize Variables
+var _Scale = 16 + gunScale;
 var _Width = sprite_get_width(sprViewmodelPistol) * _Scale;
 var _Height = sprite_get_height(sprViewmodelPistol) * _Scale;
 var _baseX = room_width / 2 + lengthdir_x(32, cameraAddTween / 6);
 var _baseY = room_height - (_Height * 0.4) + lengthdir_y(16, cameraAddTween / 8) - (gunScale * 48) + handRunY;
-
+var _Angle = 0;
 handRunY = lerp(0, 72, runLerp);
-
 gunScale = lerp(gunScale, 0, 0.2);
 
+//Set Projection
+d3d_fog_enable(false);
+draw_set_colour(c_white);
 d3d_set_projection_ortho(0, 0, room_width, room_height, 0);
 
-var _Angle = 0;
-d3d_fog_enable(false);
-draw_sprite_ext(sprViewmodelPistol, 0, _baseX, _baseY, _Scale, _Scale, _Angle, c_white, 1);
+//Draw Gun
+draw_sprite_ext(sprViewmodelPistol, 0, _baseX, _baseY + gunYAdd, _Scale, _Scale, _Angle, c_white, 1);
 
-if Intro    {
-    var _Border = 32;
-    var _Scale = 12;
-    var _Angle = wave(-6, 6, 4, 0) + introAddAngle;
-    var _baseX = room_width - ((sprite_get_width(sprBuddyCountdownHunt) - sprite_get_xoffset(sprBuddyCountdownHunt)) * _Scale) + wave(-4, 4, 1, 0);
-    var _baseY = room_height - ((sprite_get_height(sprBuddyCountdownHunt) - sprite_get_yoffset(sprBuddyCountdownHunt)) * _Scale) + wave(-8, 8, 1.2, 0) + _Border * 4;
-    
-    var _Sprite = stateSprite[introState + 1];
-    var _Index = lerp(0, sprite_get_number(_Sprite) - 1, introTimer / stateTime);
-    var _Outline = 12;
-    
-    /*
-    d3d_set_fog(true, c_white, 1, 1);
-    for (var xx = -_Outline; xx &lt; _Outline; xx ++)  {
-        for (var yy = -_Outline; yy &lt; _Outline; yy ++)  {
-            var _Alpha = (((abs(xx) + abs(yy)) / 2) / (_Outline * 2));
-            draw_sprite_ext(_Sprite, _Index, _baseX + xx, _baseY + yy, _Scale, _Scale, _Angle, c_white, 0.1);
-        }
-    }
-    */
-    d3d_fog_enable(false);
-
-    draw_sprite_ext(_Sprite, _Index, _baseX, _baseY, _Scale, _Scale, _Angle, c_white, 1);
-}   else    {
-    var _timeSeconds = ceil(musicLength);
-    var _timeMinutes = 0;
-    var _Border = 128;
-    var _posX = room_width - _Border;
-    var _posY = _Border / 2;
-    while _timeSeconds &gt;= 60 {
-        _timeMinutes += 1;
-        _timeSeconds -= 60;
-        
-    }
-    
-    if _timeSeconds &lt; 10
-        var _stringSeconds = "0" + string(_timeSeconds);
-    else
-        var _stringSeconds = string(_timeSeconds);
-
-    var _Shadow = wave(-12, 12, 2, 0);
-    var _String = "0" + string(_timeMinutes) + ":" + _stringSeconds;
-    var _Scale = 6;
-    
-    if g.sceneIndex == 9999 {
-        var _String = "ENDLESS MODE";
-    }
-    
-    draw_set_font(fontTimer);
-    draw_text_parameters(fa_right, fa_top, _posX, _posY, _String, 1, c_red, _Shadow, _Scale, 0);
-    
-    var _posX = _Border;
-    var _String = string(pointAmount) + "/" + string(pointQuota) + " PTS.";
-    if g.sceneIndex == 9999 {
-        var _String = string(pointAmount) + " PTS.";
-    }
-
-    draw_text_parameters(fa_left, fa_top, _posX, _posY, _String, 1, c_red, _Shadow, _Scale, 0);
-    
-    if (_timeMinutes &lt;= 0) and (_timeSeconds &lt;= 15) and (g.sceneIndex != 9999)  {
-        var _interpAmount = (musicLength / 15);
-        audio_sound_gain(musicPlayIndex, _interpAmount, 0);
-        
-        if (musicLength &lt;= 0) and (Finish == false) {
-            Finish = true;
-            audio_play_sound(sndBuddyFinish, 1, false);
-        }
-    }
-    
-    if comboAlpha &gt; 0  {
-        var _Dir = wave(-180, 180, 0.75, 0);
-        var _Length = 8;
-        var _posX = _Border + lengthdir_x(_Length, _Dir);
-        var _posY = room_height - (_Border * 2) + lengthdir_y(_Length, _Dir);
-        var _Colour = merge_colour(c_red, merge_colour(c_maroon, c_orange, wave(0, 1, 0.35, 0)), wave(0, 1, 0.5, 0));
-        var _Shadow = wave(-8, 8, 0.5, 0);
-        draw_text_parameters(fa_left, fa_bottom, _posX, _posY, string(comboAmount) + "x COMBO", comboAlpha, _Colour, _Shadow, _Scale + comboScaleAdd, 0);
-    
-        draw_set_alpha(comboAlpha);
-        draw_healthbar(_posX, _posY, _posX + (_Border * 6), _posY + _Border, (comboTimer / comboTimerMax) * 100, c_black, c_red, c_maroon, 0, true, true);
-        draw_set_alpha(1);
-        
-    }
-    
-    comboScaleAdd = lerp(comboScaleAdd, 0, 0.2);
+//Draw Based on State
+switch (stateCurrent)   {
+    case PSTATES.INTRO:
+        PlayerDrawEndIntro();
+        break;
+     
+    case PSTATES.PLAY:
+        PlayerDrawEndPlay();
+        break;
+     
+    case PSTATES.FINISH:
+        PlayerDrawEndFinish();
+        break;  
 }
 
-if Finish    {
-    var _Border = 32;
-    var _Scale = 12;
-    var _Angle = wave(-6, 6, 4, 0) + finishAddAngle;
-    var _baseX = room_width - ((sprite_get_width(sprBuddyFinish) - sprite_get_xoffset(sprBuddyFinish)) * _Scale) + wave(-4, 4, 1, 0);
-    var _baseY = room_height - ((sprite_get_height(sprBuddyFinish) - sprite_get_yoffset(sprBuddyFinish)) * _Scale) + wave(-8, 8, 1.2, 0) + _Border * 4;
-    
-    var _Sprite = sprBuddyFinish;
-    var _Index = 0;
-    var _Outline = 12;
-    
-    d3d_set_fog(true, c_white, 1, 1);
-    for (var xx = -_Outline; xx &lt; _Outline; xx ++)  {
-        for (var yy = -_Outline; yy &lt; _Outline; yy ++)  {
-            var _Alpha = (((abs(xx) + abs(yy)) / 2) / (_Outline * 2));
-            draw_sprite_ext(_Sprite, _Index, _baseX + xx, _baseY + yy, _Scale, _Scale, _Angle, c_white, 0.1);
-        }
-    }
-    d3d_fog_enable(false);
-
-    draw_sprite_ext(_Sprite, _Index, _baseX, _baseY, _Scale, _Scale, _Angle, c_white, 1);
-}
-
-musicLength = max(musicLength - (1 / room_speed), 0);
-
+//Reset
 d3d_fog_enable(true);
 </string>
           </argument>

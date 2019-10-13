@@ -22,7 +22,9 @@
       <filename>Dictionary.json</filename>
     </datafile>
   </datafiles>
-  <NewExtensions/>
+  <NewExtensions>
+    <extension index="0">extensions\KongAPI</extension>
+  </NewExtensions>
   <sounds name="sound">
     <sound>sound\bgmHuntingBuddy</sound>
     <sound>sound\bgmWoodlandLiving</sound>
@@ -69,23 +71,71 @@
       <script>scripts\d3d_draw_line.gml</script>
       <script>scripts\d3d_fog_enable.gml</script>
       <script>scripts\draw_reset.gml</script>
-      <script>scripts\draw_text_parameters.gml</script>
       <script>scripts\draw_text_ext_parameters.gml</script>
+      <script>scripts\draw_text_parameters.gml</script>
       <script>scripts\fs.gml</script>
       <script>scripts\lengthdir_z.gml</script>
       <script>scripts\print.gml</script>
+      <script>scripts\sound.gml</script>
       <script>scripts\turn.gml</script>
       <script>scripts\wave.gml</script>
     </scripts>
-    <script>scripts\EnemyReturnWord.gml</script>
-    <script>scripts\EnemyReturnWordRandom.gml</script>
+    <scripts name="Enemy">
+      <scripts name="Return">
+        <script>scripts\EnemyReturnWord.gml</script>
+        <script>scripts\EnemyReturnWordRandom.gml</script>
+      </scripts>
+    </scripts>
     <script>scripts\GameInitDictionary.gml</script>
-    <script>scripts\LogClose.gml</script>
-    <script>scripts\LogInit.gml</script>
-    <script>scripts\LogWrite.gml</script>
-    <script>scripts\PlayerExecuteSpawnEnemy.gml</script>
-    <script>scripts\sound.gml</script>
-    <script>scripts\TextboxReturnFactor.gml</script>
+    <scripts name="Kongregate">
+      <script>scripts\KongregateSubmitScore.gml</script>
+    </scripts>
+    <scripts name="Log">
+      <script>scripts\LogClose.gml</script>
+      <script>scripts\LogInit.gml</script>
+      <script>scripts\LogWrite.gml</script>
+    </scripts>
+    <scripts name="Player">
+      <scripts name="Execute">
+        <script>scripts\PlayerExecuteSpawnEnemy.gml</script>
+      </scripts>
+      <scripts name="Init">
+        <script>scripts\PlayerInitCamera.gml</script>
+        <script>scripts\PlayerInitCombo.gml</script>
+        <script>scripts\PlayerInitEnemy.gml</script>
+        <script>scripts\PlayerInitFog.gml</script>
+        <script>scripts\PlayerInitIntroduction.gml</script>
+        <script>scripts\PlayerInitRoom.gml</script>
+        <script>scripts\PlayerInitRunning.gml</script>
+      </scripts>
+      <scripts name="States">
+        <script>scripts\PlayerStateFinish.gml</script>
+        <script>scripts\PlayerStateIntro.gml</script>
+        <script>scripts\PlayerStatePlay.gml</script>
+      </scripts>
+      <scripts name="Draw End">
+        <script>scripts\PlayerDrawEndIntro.gml</script>
+        <script>scripts\PlayerDrawEndPlay.gml</script>
+        <script>scripts\PlayerDrawEndFinish.gml</script>
+      </scripts>
+    </scripts>
+    <scripts name="Textbox">
+      <scripts name="Return">
+        <script>scripts\TextboxReturnFactor.gml</script>
+      </scripts>
+    </scripts>
+    <scripts name="Menu">
+      <scripts name="Execute">
+        <script>scripts\MenuExecuteActionsHorizontal.gml</script>
+        <script>scripts\MenuExecuteActions.gml</script>
+      </scripts>
+      <scripts name="States">
+        <script>scripts\MenuStateNormal.gml</script>
+      </scripts>
+      <scripts name="Step">
+        <script>scripts\MenuStepInputs.gml</script>
+      </scripts>
+    </scripts>
   </scripts>
   <shaders name="shaders">
     <shader type="GLSLES">shaders\shdCRT.shader</shader>
@@ -97,6 +147,7 @@
     <font>fonts\fontTimer</font>
     <font>fonts\fontPoints</font>
     <font>fonts\fontFailurePhrase</font>
+    <font>fonts\fontMenu</font>
   </fonts>
   <objects name="objects">
     <object>objects\objBuddy</object>
@@ -117,9 +168,12 @@
     <object>objects\objTransitionOut</object>
     <object>objects\parBillboard</object>
     <object>objects\parEnemy</object>
+    <object>objects\objMenu</object>
   </objects>
   <rooms name="rooms">
+    <room>rooms\roomKongregate</room>
     <room>rooms\roomInit</room>
+    <room>rooms\roomMenu</room>
     <room>rooms\roomGame</room>
     <room>rooms\roomCutscene</room>
     <room>rooms\roomFailure</room>

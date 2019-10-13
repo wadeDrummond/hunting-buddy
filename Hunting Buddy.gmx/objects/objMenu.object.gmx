@@ -25,25 +25,74 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Initialize
+            <string>///Random Name
 
-randomize();
-GameInitDictionary();
-
-audio_group_load(agBGM);
-audio_group_load(agSND);
-
-loadedSFX = false;
-loadedBGM = false;
-
-g.sceneIndex = 9999;
-
-if os_browser != browser_not_a_browser  {
-    g.gameHTML = true;
-}   else    {
-    g.gameHTML = false;
-    instance_create(0, 0, objCRT);
+enum MENU_STATES    {
+    NORMAL, TYPING
 }
+
+enum MENU_TYPES {
+    MAIN, OPTIONS
+}
+
+stateCurrent = MENU_STATES.NORMAL;
+
+Toggle[0] = "OFF";
+Toggle[1] = "ON";
+
+menuSelected = 0;
+menuIndex = 0;
+menuTypeBlink = false;
+menuTypeAdd = "";
+alarm[0] = fs(0.25);
+
+//Main Menu
+menuArray[MENU_TYPES.MAIN, 0] = "NEW GAME";
+menuArray[MENU_TYPES.MAIN, 1] = "CONTINUE";
+menuArray[MENU_TYPES.MAIN, 2] = "COMBO MODE";
+menuArray[MENU_TYPES.MAIN, 3] = "OPTIONS";
+
+//Options
+menuArray[MENU_TYPES.OPTIONS, 0] = "DIFFICULTY";
+menuArray[MENU_TYPES.OPTIONS, 1] = "RETURN";
+
+//Fill Out Scales
+for (var i = array_height_2d(menuArray); i &gt;= 0; i --)   {
+    for (var j = array_length_2d(menuArray, i); j &gt;= 0; j --)    {
+        menuArrayScale[i, j] = 1;
+    }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Character Blink
+
+menuTypeBlink = !menuTypeBlink;
+if menuTypeBlink
+    menuTypeAdd = "_";
+else
+    menuTypeAdd = "";
+    
+alarm[0] = fs(0.25);
 </string>
           </argument>
         </arguments>
@@ -66,40 +115,12 @@ if os_browser != browser_not_a_browser  {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Only Continue if Loaded
+            <string>///Do Stuff
 
-if (loadedSFX) and (loadedBGM) and (keyboard_check_pressed(vk_anykey))  {
-    room_goto_next();
-}
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="7" enumb="72">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///Loaded
-
-if async_load[? "type"] ==  "audiogroup_load"   {
-    if async_load[? "group_id"] == agBGM
-        loadedBGM = true;
-    else if async_load[? "group_id"] == agSND
-        loadedSFX = true;
+switch (stateCurrent)   {
+    case MENU_STATES.NORMAL:
+        MenuStateNormal();
+        break;
 }
 </string>
           </argument>
@@ -123,18 +144,28 @@ if async_load[? "type"] ==  "audiogroup_load"   {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Draw Text
+            <string>///Draw Things
 
-if (loadedSFX and loadedBGM)    {
-    var _String = "PRESS ANY KEY#TO CONTINUE";
-}   else    {
-    var _Amount = mean(audio_group_load_progress(agBGM), audio_group_load_progress(agSND));
-    var _String = "LOADING SOUNDS##" + string(floor(_Amount)) + "% LOADED"
+var _shadowLength = wave(1, 8, 1, 0);
+var _colourMix = wave(0, 1, 3, 0);
+var _scaleBase = 1;
+var _Border = (18 * _scaleBase);
+var _posX = _Border;
+var _posY = room_height - _Border;
+
+draw_set_font(fontMenu);
+for (var i = array_length_1d(menuArray) - 1; i &gt;= 0; i --)    {
+    
+    var _String = menuArray[menuIndex, i];
+    if (menuSelected == i)  {
+        var _Colour = merge_colour(c_blue, c_aqua, _colourMix);
+    }   else    {
+        var _Colour = merge_colour(c_white, c_gray, _colourMix);
+    }
+    var _Scale = _scaleBase;
+    draw_text_parameters(fa_left, fa_bottom, _posX, _posY, _String, 1, _Colour, _shadowLength, _Scale);
+    _posY -= (string_height(_String) * 1.15) * _Scale;
 }
-
-var _drawShadow = wave(4, 8, 1, 0);
-draw_set_font(fontEnemy);
-draw_text_parameters(fa_center, fa_middle, view_xview + view_wview / 2, view_yview + view_hview / 2, _String, 1, c_white, _drawShadow, 1, 0);
 </string>
           </argument>
         </arguments>
