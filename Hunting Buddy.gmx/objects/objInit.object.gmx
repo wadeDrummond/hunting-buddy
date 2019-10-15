@@ -37,6 +37,10 @@ loadedSFX = false;
 loadedBGM = false;
 
 g.sceneIndex = 9999;
+g.statsMistakes = 0;
+g.statsWords = 0;
+g.statsLetters = 0;
+g.statsComboLongest = 0;
 
 if os_browser != browser_not_a_browser  {
     g.gameHTML = true;

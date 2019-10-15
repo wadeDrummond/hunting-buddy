@@ -63,7 +63,7 @@ Ready = true;
         </arguments>
       </action>
     </event>
-    <event eventtype="8" enumb="0">
+    <event eventtype="8" enumb="64">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -84,7 +84,7 @@ Ready = true;
 
 draw_set_alpha(Alpha);
 draw_set_colour(c_black);
-draw_rectangle(0, 0, room_width, room_height, 0);
+draw_rectangle(0, 0, display_get_gui_width(), display_get_gui_height(), 0);
 draw_set_alpha(1);
 
 audio_set_master_gain(0, 1 - Alpha);
@@ -94,8 +94,13 @@ if !Ready exit;
 Alpha = clamp(Alpha + Speed, 0, 1);
 
 if Alpha &gt;= 1   {
+    d3d_end();
     audio_stop_all();
     audio_set_master_gain(0, 1);
+    d3d_set_projection_ortho(0, 0, room_width, room_height, 0);
+    d3d_set_fog(false, c_white, 0, 0);
+    d3d_transform_set_identity();
+    instance_deactivate_all(true);
     room_goto(Target);
     instance_destroy();
 }

@@ -68,6 +68,7 @@ image_index = 0;
             <kind>1</kind>
             <string>///Miss!
 
+g.statsMistakes ++;
 var _missRange = 128;
 
 if !g.gameHTML  {
@@ -121,6 +122,8 @@ sound(sndType);
             <kind>1</kind>
             <string>///Die
 
+g.statsWords ++;
+
 drawState = 1;
 sound(sndCompleteWord);
 
@@ -169,6 +172,8 @@ y = _oldY;
           <argument>
             <kind>1</kind>
             <string>///Increment Word Position
+
+g.statsLetters ++;
 
 enemyWordPosition ++;
 addScale = 0.5;

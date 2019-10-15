@@ -107,7 +107,7 @@ Started = false;
 xAdd = sprite_width * 2;
 
 musicIndex[0] = bgmHuntingBuddy;
-backgroundIndex[0] = sprNeighborhoodDay;
+backgroundIndex[0] = sprSceneNeighborhoodDay;
 
 backgroundFrame = 0;
 backgroundSpeed = 0;
@@ -213,6 +213,10 @@ if !instance_exists(objTransitionIn)    {
 
 if Started  {
     xAdd = lerp(xAdd, 0, 0.01);
+}
+
+if keyboard_check_pressed(vk_escape)    {
+    event_user(0);
 }
 </string>
           </argument>

@@ -12,8 +12,12 @@ switch (menuIndex)  {
             break;
             
             case 2: //COMBO MODE
-                room_goto(roomGame);
+                fade_to(roomGame);
                 g.sceneIndex = 9999;
+            break;
+            
+            case 3: //OPTIONS
+                fade_to(roomOutro);
             break;
         }
     break;

@@ -18,4 +18,5 @@ var _Scale = wave(5, 7, 2, 0);
 var _String = string(pointAmount) + "/" + string(pointQuota) + " PTS.";
 if comboMode
     var _String = string(pointAmount) + " PTS.";
+draw_set_font(fontTimer);
 draw_text_parameters(fa_left, fa_top, _posX, _posY, _String, 1, c_red, _Shadow, _Scale, 0);

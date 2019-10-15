@@ -27,41 +27,65 @@
   </NewExtensions>
   <sounds name="sound">
     <sound>sound\bgmHuntingBuddy</sound>
-    <sound>sound\bgmWoodlandLiving</sound>
     <sound>sound\bgmPASWO</sound>
+    <sound>sound\bgmWoodlandLiving</sound>
+    <sound>sound\bgmTelly</sound>
+    <sound>sound\sndBuddyFinish</sound>
     <sound>sound\sndBuddyHunt</sound>
+    <sound>sound\sndStatic</sound>
     <sound>sound\sndBuddyOne</sound>
+    <sound>sound\sndRemote</sound>
     <sound>sound\sndBuddyThree</sound>
     <sound>sound\sndBuddyTwo</sound>
     <sound>sound\sndCompleteWord</sound>
     <sound>sound\sndDialogue</sound>
+    <sound>sound\sndFlicker</sound>
     <sound>sound\sndType</sound>
-    <sound>sound\sndBuddyFinish</sound>
   </sounds>
   <sprites name="sprites">
-    <sprite>sprites\sprBuddyCountdownHunt</sprite>
-    <sprite>sprites\sprBuddyCountdownIdle</sprite>
-    <sprite>sprites\sprBuddyCountdownOne</sprite>
-    <sprite>sprites\sprBuddyCountdownThree</sprite>
-    <sprite>sprites\sprBuddyCountdownTwo</sprite>
-    <sprite>sprites\sprBuddyFinish</sprite>
-    <sprite>sprites\sprBuddyNervous</sprite>
-    <sprite>sprites\sprBuddyNervousTalk</sprite>
-    <sprite>sprites\sprBuddyOffer</sprite>
-    <sprite>sprites\sprBuddyOfferTalk</sprite>
-    <sprite>sprites\sprBuddySad</sprite>
-    <sprite>sprites\sprDetailDay</sprite>
-    <sprite>sprites\sprDetailDayLarge</sprite>
-    <sprite>sprites\sprFence</sprite>
-    <sprite>sprites\sprNeighborhoodDay</sprite>
-    <sprite>sprites\sprPlayer</sprite>
-    <sprite>sprites\sprRabbitHop</sprite>
-    <sprite>sprites\sprRabbitIdle</sprite>
-    <sprite>sprites\sprViewmodelPistol</sprite>
-    <sprite>sprites\texGrassDay</sprite>
-    <sprite>sprites\texGrassNight</sprite>
-    <sprite>sprites\texSkyboxDay</sprite>
-    <sprite>sprites\texSkyboxNight</sprite>
+    <sprites name="Characters">
+      <sprites name="Buddy">
+        <sprite>sprites\sprBuddyCountdownHunt</sprite>
+        <sprite>sprites\sprBuddyCountdownIdle</sprite>
+        <sprite>sprites\sprBuddyCountdownOne</sprite>
+        <sprite>sprites\sprBuddyCountdownThree</sprite>
+        <sprite>sprites\sprBuddyCountdownTwo</sprite>
+        <sprite>sprites\sprBuddyFinish</sprite>
+        <sprite>sprites\sprBuddyNervous</sprite>
+        <sprite>sprites\sprBuddyNervousTalk</sprite>
+        <sprite>sprites\sprBuddyOffer</sprite>
+        <sprite>sprites\sprBuddyOfferTalk</sprite>
+        <sprite>sprites\sprBuddySad</sprite>
+      </sprites>
+      <sprites name="Rabbit">
+        <sprite>sprites\sprRabbitHop</sprite>
+        <sprite>sprites\sprRabbitIdle</sprite>
+      </sprites>
+      <sprites name="Player">
+        <sprite>sprites\sprPlayerTopdown</sprite>
+        <sprite>sprites\sprViewmodelPistol</sprite>
+      </sprites>
+    </sprites>
+    <sprites name="Scenes">
+      <sprite>sprites\sprSceneNeighborhoodDay</sprite>
+      <sprite>sprites\sprSceneTV</sprite>
+      <sprite>sprites\sprSceneTVStatic</sprite>
+      <sprite>sprites\sprSceneTVRemote</sprite>
+    </sprites>
+    <sprites name="Textures">
+      <sprite>sprites\texGrassDay</sprite>
+      <sprite>sprites\texGrassNight</sprite>
+      <sprite>sprites\texSkyboxDay</sprite>
+      <sprite>sprites\texSkyboxNight</sprite>
+    </sprites>
+    <sprites name="World">
+      <sprite>sprites\sprDetailDay</sprite>
+      <sprite>sprites\sprDetailDayLarge</sprite>
+      <sprite>sprites\sprFence</sprite>
+    </sprites>
+    <sprites name="Effects">
+      <sprite>sprites\sprNoise</sprite>
+    </sprites>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -149,6 +173,7 @@
     <font>fonts\fontPoints</font>
     <font>fonts\fontFailurePhrase</font>
     <font>fonts\fontMenu</font>
+    <font>fonts\fontTV</font>
   </fonts>
   <objects name="objects">
     <object>objects\objBuddy</object>
@@ -159,9 +184,11 @@
     <object>objects\objFailure</object>
     <object>objects\objFailurePhrase</object>
     <object>objects\objFence</object>
+    <object>objects\objFlicker</object>
     <object>objects\objFloor</object>
     <object>objects\objInit</object>
     <object>objects\objMenu</object>
+    <object>objects\objOutro</object>
     <object>objects\objPlayer</object>
     <object>objects\objPoint</object>
     <object>objects\objSkybox</object>
@@ -170,13 +197,15 @@
     <object>objects\objTransitionOut</object>
     <object>objects\parBillboard</object>
     <object>objects\parEnemy</object>
+    <object>objects\objOutroEntry</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\roomKongregate</room>
     <room>rooms\roomInit</room>
     <room>rooms\roomMenu</room>
-    <room>rooms\roomGame</room>
     <room>rooms\roomCutscene</room>
+    <room>rooms\roomGame</room>
+    <room>rooms\roomOutro</room>
     <room>rooms\roomFailure</room>
   </rooms>
   <constants number="1">

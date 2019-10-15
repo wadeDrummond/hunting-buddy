@@ -20,6 +20,7 @@ musicIndex[0] = bgmWoodlandLiving;
 musicIndex[9999] = bgmPASWO;
 
 musicLength = audio_sound_length(musicIndex[g.sceneIndex]);
+musicLength = 1;
 musicPlayIndex = -1;
 
 pointAmount = 0;

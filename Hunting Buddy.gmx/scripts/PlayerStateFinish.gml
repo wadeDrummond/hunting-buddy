@@ -4,7 +4,7 @@
 finishAddAngle = lerp(finishAddAngle, 0, 0.1);
 
 //Submit Every Frame if Over
-if submitKong   {
+if comboSubmit   {
     KongregateSubmitScore("COMBOSCORE", pointAmount);
 }
 
@@ -12,6 +12,8 @@ if submitKong   {
 if !finishSoundPlayed   {
     finishSoundPlayed = true;
     sound(sndBuddyFinish);
+    
+    fade_to(roomOutro);
 }
 
 //Restart
