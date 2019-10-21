@@ -46,7 +46,7 @@ if os_browser != browser_not_a_browser  {
     g.gameHTML = true;
 }   else    {
     g.gameHTML = false;
-    instance_create(0, 0, objCRT);
+    
 }
 </string>
           </argument>

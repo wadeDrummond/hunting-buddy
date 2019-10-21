@@ -49,12 +49,16 @@ drawY = room_height / 2;
 channelString = "3";
 channelAlpha = 0;
 
-remoteYDown = room_height;
-remoteYUp = room_height - sprite_get_height(sprSceneTVRemote) * drawScaleBase;
+remoteScale = 1.75;
+remoteYDown = room_height + 96;
+remoteYUp = room_height - sprite_get_height(sprSceneTVRemote) * (drawScaleBase * remoteScale) + 96;
 remoteY = remoteYDown;
-remoteX = room_width - ((sprite_get_width(sprSceneTVRemote) * drawScaleBase) * 1.5)
+remoteX = room_width - ((sprite_get_width(sprSceneTVRemote) * drawScaleBase))
 remoteIndex = 0;
 remoteIndexMax = sprite_get_number(sprSceneTVRemote) - 1;
+remoteAngle = 0;
+remoteAngleMin = -20;
+remoteAngleMax = 0;
 
 tvSprite = sprSceneTV;
 tvIndex = 0;
@@ -172,9 +176,10 @@ switch (stateIndex) {
     break;
     
     case 7:
-        remoteY = lerp(remoteY, remoteYUp, 0.2);
+        remoteY = lerp(remoteY, remoteYUp, 0.08);
+        remoteAngle = lerp(remoteAngle, remoteAngleMin, 0.08);
         stateTimer ++;
-        if stateTimer &gt;= fs(1.5)    {
+        if stateTimer &gt;= fs(2)    {
             stateIndex = 8;
             stateTimer = 0;
         }
@@ -224,7 +229,8 @@ switch (stateIndex) {
     break;
     
     case 11:
-        remoteY = lerp(remoteY, remoteYDown, 0.2);
+        remoteY = lerp(remoteY, remoteYDown, 0.08);
+        remoteAngle = lerp(remoteAngle, remoteAngleMax, 0.08);
     break;
 }
 </string>
@@ -279,8 +285,17 @@ draw_text_parameters(fa_left, fa_top, _Border, _Border, channelString, channelAl
             <kind>1</kind>
             <string>///Draw TV
 
+var _drawRemoteX = remoteX + wave(-12, 6, 12, 0);
+var _drawRemoteY = remoteY + wave(0, 4, 14, 0);
+var _drawRemoteAngle = remoteAngle + wave(-4, 4, 20, 0);
+
 draw_sprite_ext(tvSprite, tvIndex, drawX, drawY, drawScale, drawScale, 0, c_white, 1);
-draw_sprite_ext(sprSceneTVRemote, remoteIndex, remoteX, remoteY, drawScale, drawScale, 0, c_white, 1);
+
+d3d_transform_set_identity();
+d3d_transform_add_rotation_x(wave(0, 20, 4, 0));
+d3d_transform_add_translation(_drawRemoteX, _drawRemoteY, 0);
+draw_sprite_ext(sprSceneTVRemote, remoteIndex, 0, 0, drawScale * remoteScale, drawScale * remoteScale, _drawRemoteAngle, c_white, 1);
+d3d_transform_set_identity();
 </string>
           </argument>
         </arguments>

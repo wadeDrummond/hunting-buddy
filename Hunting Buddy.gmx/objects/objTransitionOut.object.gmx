@@ -94,13 +94,11 @@ if !Ready exit;
 Alpha = clamp(Alpha + Speed, 0, 1);
 
 if Alpha &gt;= 1   {
-    d3d_end();
     audio_stop_all();
     audio_set_master_gain(0, 1);
-    d3d_set_projection_ortho(0, 0, room_width, room_height, 0);
-    d3d_set_fog(false, c_white, 0, 0);
-    d3d_transform_set_identity();
     instance_deactivate_all(true);
+    display_set_gui_size(1920, 1080);
+    d3d_end();
     room_goto(Target);
     instance_destroy();
 }

@@ -71,6 +71,8 @@
       <sprite>sprites\sprSceneTV</sprite>
       <sprite>sprites\sprSceneTVStatic</sprite>
       <sprite>sprites\sprSceneTVRemote</sprite>
+      <sprite>sprites\sceneNews1</sprite>
+      <sprite>sprites\sceneNewsPanic</sprite>
     </sprites>
     <sprites name="Textures">
       <sprite>sprites\texGrassDay</sprite>
@@ -162,9 +164,6 @@
       </scripts>
     </scripts>
   </scripts>
-  <shaders name="shaders">
-    <shader type="GLSLES">shaders\shdCRT.shader</shader>
-  </shaders>
   <fonts name="fonts">
     <font>fonts\fontEnemy</font>
     <font>fonts\fontIntro</font>
@@ -177,7 +176,6 @@
   </fonts>
   <objects name="objects">
     <object>objects\objBuddy</object>
-    <object>objects\objCRT</object>
     <object>objects\objDetailDay</object>
     <object>objects\objDetailDayLarge</object>
     <object>objects\objEnemyRabbit</object>
